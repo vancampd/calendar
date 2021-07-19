@@ -1,0 +1,39 @@
+.home-page {
+  padding: 1.5rem;
+  height: 100vh;
+}
+
+.calendar {
+  height: calc(100% - 5rem);
+
+  &__days-section {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid grey;
+    height: 100%;
+  }
+
+  &__labels-section {
+    display: flex;
+  }
+
+  &__labels {
+    width: calc(100% / 7);
+    padding: 0.5rem;
+  }
+
+  &__day {
+    border-right: 1px solid grey;
+    border-top: 1px solid grey;
+    width: calc(100% / 7);
+    padding: 0.5rem;
+
+    &:nth-child(7n) {
+      border-right: none;
+    }
+
+    &:nth-child(-n + 7) {
+      border-top: none;
+    }
+  }
+}
