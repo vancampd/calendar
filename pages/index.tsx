@@ -63,10 +63,9 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
           <section className={styles['calendar__days-section']}>
             {
               daysArray.map((day,i) => 
-              <Link href={`/single-day/${month+1}-${day}-${year}`}>
+              <Link href={`/single-day/${month+1}-${day}-${year}`} key={i}>
                   <div 
                     className={day ? styles['calendar__day'] : styles['calendar__day--no-border']} 
-                    key={i}
                     onClick={()=>setDays}
                   >
                     {day}

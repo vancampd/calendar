@@ -6,8 +6,8 @@ import axios from 'axios'
 import {server} from '../../config/index'
 
 
-const singleDay = ({year, setYear, month, setMonth, handleDateChange, months}) => {
-
+const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events}) => {
+    console.log(events)
     const router = useRouter()
     const {day} = router.query
 
@@ -16,7 +16,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months}) =
     if(day) dayArray = day.toString().split('-')
 
     const [input, setInput] = useState({
-        item: '',
+        description: '',
         type: ''
     })
 
@@ -36,7 +36,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months}) =
 
         console.log('input being submitted', input)
 
-        if(!input.item || !input.type) return setError(true)
+        if(!input.description || !input.type) return setError(true)
 
         axios
             .post(`${server}/api/events/${day}`, {
@@ -45,9 +45,10 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months}) =
                 month,
                 year
             })
+            .then(res => console.log(res))
 
         setInput({
-            item: '',
+            description: '',
             type: ''
         })
 
@@ -68,8 +69,8 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months}) =
                 <label>
                     <input 
                         type='text'
-                        name='item'
-                        value={input.item}
+                        name='description'
+                        value={input.description}
                         onChange={handleInputChange}
                     />
                 </label>
@@ -102,8 +103,35 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months}) =
                     : ''
                 }
             </form>
+            <section>
+                <h2>Events</h2>
+                {
+                    events
+                        .filter(event => event.type === 'event')
+                        .map(event => <p key={event.id}>{event.description}</p>)
+                }
+                <h2>Tasks</h2>
+                {
+                    events
+                        .filter(event => event.type === 'task')
+                        .map(event => <p key={event.id}>{event.description}</p>)
+                }
+            </section>
         </div>
     )
 }
 
 export default singleDay;
+
+export const getServerSideProps = async (context) => {
+    const {day} = context.params
+    let events;
+    
+    const res = await axios.get(`${server}/api/events/${day}`)
+
+    return {
+        props: {
+            events: res.data
+        }
+    }
+}
