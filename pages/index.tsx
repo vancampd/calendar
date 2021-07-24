@@ -2,8 +2,12 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
 import {useState, useEffect} from 'react'
 import Link from 'next/link'
+import {server} from '../config/index'
+import axios from 'axios'
 
-export default function Home({year, setYear, month, setMonth, handleDateChange, months}) {
+export default function Home({year, setYear, month, setMonth, handleDateChange, months, events, dayOfMonth, setDayOfMonth}) {
+  console.log('events', events)
+
   const daysOfTheWeek: string[] = [
     'Sunday', 
     'Monday', 
@@ -17,23 +21,23 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
   const months31: number[] = [0,2,4,6,7,9,11]
   const months30: number[] = [3,5,8,10]
 
-  const [days, setDays] = useState<number | undefined>()
+  const [numberOfDays, setNumberOfDays] = useState<number | undefined>()
 
   // Set the amount of days in the month to 31, 30, or 28 based on which month is selected in the <select> menu in the header
   useEffect(()=>{
     if(months31.includes(month)) {
-      setDays(31)
+      setNumberOfDays(31)
     }
     else if (months30.includes(month)){
-      setDays(30)
+      setNumberOfDays(30)
     }
-    else setDays(28)
+    else setNumberOfDays(28)
   },[month] )
 
   // Create array of dates to map through based on how many days are in the selected month
   const daysArray: (number | string)[] = []
-  if(typeof days !== 'undefined'){
-    for(let i = 1; i <= days; i++) daysArray.push(i)
+  if(typeof numberOfDays !== 'undefined'){
+    for(let i = 1; i <= numberOfDays; i++) daysArray.push(i)
   } 
 
   // Find which day the 1st of the month is
@@ -57,18 +61,21 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
         <section className={styles.calendar}>
           <div className={styles['calendar__labels-section']}>
             {
-            daysOfTheWeek.map(day => <div key={day} className={styles['calendar__labels']}>{day}</div>)
+              daysOfTheWeek.map(day => <div key={day} className={styles['calendar__labels']}>{day}</div>)
             }
           </div>
           <section className={styles['calendar__days-section']}>
             {
               daysArray.map((day,i) => 
-              <Link href={`/single-day/${month+1}-${day}-${year}`} key={i}>
+              <Link href={`/single-day/${month+1}-${day}-${year}`} key={i} >
                   <div 
                     className={day ? styles['calendar__day'] : styles['calendar__day--no-border']} 
-                    onClick={()=>setDays}
+                    onClick={()=> setDayOfMonth(day)}
                   >
                     {day}
+                    {
+                      events.filter(event => event.day === day).map(event => <p>{event.description}</p>)
+                    }
                 </div>
               </Link>)
             }
@@ -79,4 +86,15 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
         
     </div>
   )
+}
+
+export const getServerSideProps = async (context) => {
+  
+  const res = await axios.get(`${server}/api/indexRoutes`)
+
+  return {
+      props: {
+          events: res.data
+      }
+  }
 }

@@ -7,7 +7,6 @@ import {server} from '../../config/index'
 
 
 const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events}) => {
-    console.log(events)
     const router = useRouter()
     const {day} = router.query
 
@@ -64,7 +63,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 <meta name="description" content="Your schedule and tasks for a single day" />
                 <link rel="icon" href="/calendar.svg" alt='By Font Awesome - Own work, OFL, https://commons.wikimedia.org/w/index.php?curid=37001111'/>
             </Head>
-            <h1>{months[month]} {dayArray[1]}</h1>
+            <h1>{months[month]} {dayArray[1]} {dayArray[2]}</h1>
             <form onSubmit={handleFormSubmit}>
                 <label>
                     <input 
@@ -125,13 +124,12 @@ export default singleDay;
 
 export const getServerSideProps = async (context) => {
     const {day} = context.params
-    let events;
     
     const res = await axios.get(`${server}/api/events/${day}`)
 
     return {
         props: {
-            events: res.data
+            events: res.data || null
         }
     }
 }

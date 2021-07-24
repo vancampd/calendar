@@ -39,7 +39,7 @@ export default function handler(req, res){
                     description: event.description, 
                     type: event.type
                 }
-                })
+            })
             res.status(200).json(resultObjects)
         })
     }
