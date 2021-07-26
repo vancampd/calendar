@@ -54,4 +54,15 @@
       box-shadow: 1px 0px 0px 0px grey;
     }
   }
+
+  &__event {
+    font-size: 0.75rem;
+    color: grey;
+    margin: 0.25rem;
+
+    &--task {
+      @extend .calendar__event;
+      color: green;
+    }
+  }
 }

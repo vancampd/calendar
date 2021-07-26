@@ -6,7 +6,6 @@ import {server} from '../config/index'
 import axios from 'axios'
 
 export default function Home({year, setYear, month, setMonth, handleDateChange, months, events, dayOfMonth, setDayOfMonth}) {
-  console.log('events', events)
 
   const daysOfTheWeek: string[] = [
     'Sunday', 
@@ -74,7 +73,9 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
                   >
                     {day}
                     {
-                      events.filter(event => event.day === day).map(event => <p>{event.description}</p>)
+                      events.filter(event => event.day === day && event.month === month && event.year === year).map(event => <p key={event.id}
+                      className={event.type === 'event' ? styles['calendar__event'] : styles['calendar__event--task']}
+                      >{event.description}</p>)
                     }
                 </div>
               </Link>)
@@ -82,8 +83,6 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
           </section>
         </section>
       </main>
-
-        
     </div>
   )
 }

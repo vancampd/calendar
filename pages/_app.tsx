@@ -16,17 +16,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     const {name, value} = e.target   
         if(name === 'month') setMonth(parseInt(value))
         if(name === 'year') setYear(parseInt(value))
+        setDayOfMonth()
   }
 
-  useEffect(()=>{
-   if(router.pathname === '/single-day/[day]'){
-    const dayArray = router.query.day.split('-')
-    setDayOfMonth(dayArray[1])
-  } 
-  }, [router.pathname])
-
   useEffect(()=> {
-    router.push(`/single-day/${month+1}-${dayOfMonth}-${year}`) 
+    if(dayOfMonth && month && year){
+      router.push(`/single-day/${month+1}-${dayOfMonth}-${year}`) 
+    }
+    else router.push(`/`)
   },[month, dayOfMonth, year])
  
   return (

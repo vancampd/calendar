@@ -18,7 +18,6 @@ export default function handler(req, res){
         const sql = `SELECT id, day, month, year, description, type FROM calendar.calendar_items`
 
         con.query(sql, (err, result) => {
-            console.log(result)
             const resultObjects = result.map(event => {
                 return {
                     id: event.id,

@@ -2,4 +2,75 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 1.5rem;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__button {
+    border: none;
+    background-color: white;
+    text-decoration: underline;
+    cursor: pointer;
+    &:hover {
+      color: grey;
+    }
+    &--delete {
+      @extend .single-day__button;
+      color: red;
+    }
+  }
+
+  &__events-container {
+    width: 100%;
+  }
+
+  &__event {
+    width: 100%;
+    display: flex;
+    margin-left: 2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__task {
+    display: flex;
+    justify-content: space-between;
+    width: 48%;
+  }
+
+  &__task-label {
+    &--checked {
+      @extend .single-day__task-input;
+      text-decoration: line-through;
+      color: grey;
+    }
+  }
+
+  &__task-input {
+    margin-right: 2rem;
+  }
+
+  &__event-description {
+    margin: 0;
+  }
+
+  &__time-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__half-day {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+  }
+
+  &__time {
+    // border-bottom: 1px solid grey;
+    margin-bottom: 1rem;
+    display: flex;
+  }
 }
