@@ -16,7 +16,22 @@ export default function handler(req, res){
     if(req.method === 'POST'){
         const { description, type, day, month, year, time, timeOfDay } = req.body
 
-        const sql = `INSERT INTO calendar.calendar_items (day, month, year, description, type, time, timeOfDay) VALUES (${day}, ${month}, ${year}, '${description}', '${type}', '${time}', '${timeOfDay}')`;
+        let sql:string = '';
+
+        if(type === 'event') sql = `INSERT INTO calendar.calendar_items (day, month, year, description, type, time, timeOfDay) VALUES (${day}, ${month}, ${year}, '${description}', '${type}', '${time}', '${timeOfDay}')`;
+
+        if(type === 'task') sql = `INSERT INTO calendar.calendar_items (day, month, year, description, type) VALUES (${day}, ${month}, ${year}, '${description}', '${type}')`;
+
+        con.query(sql, (err, result) => {
+            if(err) return console.log('Error inserting data', err)
+            res.status(200).send(result)
+        }) 
+    }
+
+    if(req.method === 'PUT'){
+        const { description, type, time, timeOfDay, id } = req.body
+
+        const sql = `UPDATE calendar.calendar_items SET description='${description}', type='${type}', time='${time}', timeOfDay='${timeOfDay}' WHERE id='${id}'`;
 
         con.query(sql, (err, result) => {
             if(err) return console.log('Error inserting data', err)

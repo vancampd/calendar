@@ -1,12 +1,26 @@
-.single-day {
+.overlay {
+  background-color: rgba($color: #000000, $alpha: 0.7);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 1.5rem 1.5rem 1.5rem;
+  margin: 0 1.5rem;
 
   &__form {
     display: flex;
     flex-direction: column;
+    background-color: white;
+    padding: 4rem;
   }
 
   &__input-container {
@@ -40,7 +54,7 @@
       color: grey;
     }
     &--delete {
-      @extend .single-day__event-button;
+      @extend .edit-item__event-button;
       color: red;
     }
   }
@@ -65,7 +79,7 @@
 
   &__task-label {
     &--checked {
-      @extend .single-day__task-input;
+      @extend .edit-item__task-input;
       text-decoration: line-through;
       color: grey;
     }
@@ -96,6 +110,11 @@
     display: flex;
   }
 
+  &__button-container {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
   &__button {
     background-color: black;
     color: white;
@@ -108,6 +127,18 @@
     &:hover {
       background-color: white;
       color: black;
+    }
+
+    &--cancel {
+      @extend .edit-item__button;
+      background-color: white;
+      color: black;
+
+      &:hover {
+        background-color: black;
+        color: white;
+        text-decoration: underline;
+      }
     }
   }
 }

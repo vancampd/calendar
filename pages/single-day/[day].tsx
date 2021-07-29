@@ -1,14 +1,14 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Head from 'next/head'
 import {useRouter} from 'next/router'
 import styles from '../../styles/SingleDay.module.scss'
 import axios from 'axios'
 import {server} from '../../config/index'
 import DeleteItem from '../../components/DeleteItem/DeleteItem'
+import EditItem from '../../components/EditItem/EditItem'
 
 
 const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events, checkedItems}) => {
-    console.log('checkedItems',checkedItems)
     const router = useRouter()
     const {day} = router.query
 
@@ -24,6 +24,8 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
     })
 
     const [error, setError] = useState(false)
+
+    const [schedule, setSchedule] = useState(events)
 
     const handleInputChange = (e) => {
         const {name, value} = e.target
@@ -41,6 +43,10 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
 
         if(!input.description || !input.type) return setError(true)
 
+        if(input.type === 'event' && !input.time) return setError(true)
+
+        if(input.type === 'event' && !input.timeOfDay) return setError(true)
+
         axios
             .post(`${server}/api/events/${day}`, {
                 ...input,
@@ -49,8 +55,10 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 year
             })
             .then(res => {
-                console.log(res.config.data)
+                return axios.get(`${server}/api/events/${day}`)
+                .then(res => setSchedule(res.data))
             })
+            .catch(err => console.log('error posting event', err))
 
         setInput({
             description: '',
@@ -66,6 +74,19 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
     const [showDelete, setShowDelete] = useState<boolean>(false)
     const [id, setId] = useState<number | undefined>()
 
+    interface Event {
+        day: number;
+        month: number;
+        year: number;
+        description: string;
+        type: string;
+        time: number;
+        timeOfDay: string;
+    }
+    
+    const [showEdit, setShowEdit] = useState<boolean>(false)
+    const [editedEvent, setEditedEvent] = useState<Event>()
+
     const handleDelete = (e, id) => {
         e.preventDefault()
 
@@ -78,9 +99,13 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
             .then(res => {
                 console.log(res)
                 setShowDelete(false)
-                events = axios.get(`${server}/api/events/${day}`)
             })
     }
+
+    useEffect(()=>{
+        axios.get(`${server}/api/events/${day}`)
+        .then(res => setSchedule(res.data))
+    },[showEdit, showDelete])
 
     const [checkedTasks, setCheckedTasks] = useState<number[]>(checkedItems.map(item=>item.item_id))
 
@@ -99,7 +124,6 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
             .put(`${server}/api/checked`, { checked, id: parseInt(value) })
     }
 
-    console.log('checkedTasks',checkedTasks)
 
     return (
         <div className={styles['single-day']}>
@@ -114,72 +138,92 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 <DeleteItem setShowDelete={setShowDelete} handleDelete={handleDelete} id={id}/>
                 : ''
             }
+            {
+                showEdit ?
+                <EditItem editedEvent={editedEvent} day={day} setShowEdit={setShowEdit}/>
+                : ''
+            }
             <h1>{months[month]} {dayArray[1]} {dayArray[2]}</h1>
             <form onSubmit={handleFormSubmit} className={styles['single-day__form']}>
-                <label>
-                    Description: 
-                    <input 
-                        type='text'
-                        name='description'
-                        value={input.description}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <div>
-                <h2>Type of event:</h2>
-                    <label>
-                        Event
+                <div className={styles['single-day__input-container']}>
+                    <label className={styles['single-day__event-heading']}>
+                        Description: 
                         <input 
-                            type='radio'
-                            name='type'
-                            value='event'
-                            checked={input.type === 'event' ? true : false}
+                            type='text'
+                            name='description'
+                            value={input.description}
                             onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
-                        Task
-                        <input 
-                            type='radio'
-                            name='type'
-                            value='task'
-                            checked={input.type === 'task' ? true : false}
-                            onChange={handleInputChange}
+                            className={styles['single-day__input']}
                         />
                     </label>
                 </div>
-                <label>
-                    Time
-                    <input 
-                        type='number'
-                        min='1'
-                        max='12'
-                        name='time'
-                        value={input.time}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <label>
-                    AM
-                    <input 
-                        type='radio'
-                        name='timeOfDay'
-                        value='am'
-                        checked={input.timeOfDay === 'am' ? true : false}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <label>
-                    PM
-                    <input 
-                        type='radio'
-                        name='timeOfDay'
-                        value='pm'
-                        checked={input.timeOfDay === 'pm' ? true : false}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <button>
+                <div className={styles['single-day__input-container']}>
+                    <h3 className={styles['single-day__event-heading']}>Event type:</h3>
+                        <label>
+                            Event
+                            <input 
+                                type='radio'
+                                name='type'
+                                value='event'
+                                checked={input.type === 'event' ? true : false}
+                                onChange={handleInputChange}
+                                className={styles['single-day__input']}
+
+                            />
+                        </label>
+                        <label>
+                            Task
+                            <input 
+                                type='radio'
+                                name='type'
+                                value='task'
+                                checked={input.type === 'task' ? true : false}
+                                onChange={handleInputChange}
+                                className={styles['single-day__input']}
+
+                            />
+                        </label>
+                </div>
+                {
+                    input.type === 'event' ?
+                    <div className={styles['single-day__input-container']}>
+                        <label className={styles['single-day__event-heading']}>
+                            Time:
+                            <input 
+                                type='number'
+                                min='1'
+                                max='12'
+                                name='time'
+                                value={input.time}
+                                onChange={handleInputChange}
+                                className={styles['single-day__input']}
+                            />
+                        </label>
+                        <label>
+                            AM
+                            <input 
+                                type='radio'
+                                name='timeOfDay'
+                                value='am'
+                                checked={input.timeOfDay === 'am' ? true : false}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label>
+                            PM
+                            <input 
+                                type='radio'
+                                name='timeOfDay'
+                                value='pm'
+                                checked={input.timeOfDay === 'pm' ? true : false}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                    </div>
+                    : ''
+                }
+                
+                <button className={styles['single-day__button']}>
                     Add
                 </button>
                 {
@@ -198,13 +242,13 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                             hours.map(hour => <div key={hour} className={styles['single-day__time']}>
                                 {hour}
                                 {
-                                    events
+                                    schedule
                                         .filter(event => event.type === 'event' && event.time === hour && event.timeOfDay === 'am')
                                         .map(event => <div key={event.id} className={styles['single-day__event']}>
                                                 <p className={styles['single-day__event-description']}>{event.description}</p>
                                                 <div>
-                                                    <button className={styles['single-day__button']}>edit</button>
-                                                    <button className={styles['single-day__button--delete']} onClick={()=> {setShowDelete(true); setId(event.id)}}>delete</button>
+                                                    <button className={styles['single-day__event-button']} onClick={()=> {setShowEdit(true); setEditedEvent(event)}}>edit</button>
+                                                    <button className={styles['single-day__event-button--delete']} onClick={()=> {setShowDelete(true); setId(event.id)}}>delete</button>
                                                 </div>
                                             </div>)
                                 }
@@ -217,13 +261,13 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                             hours.map(hour => <div key={hour} className={styles['single-day__time']}>
                                     {hour}
                                     {
-                                        events
+                                        schedule
                                             .filter(event => event.type === 'event' && event.time === hour && event.timeOfDay === 'pm')
                                             .map(event => <div key={event.id} className={styles['single-day__event']}>
                                                     <p className={styles['single-day__event-description']}>{event.description}</p>
                                                     <div>
-                                                        <button className={styles['single-day__button']}>edit</button>
-                                                        <button className={styles['single-day__button--delete']} onClick={()=> {setShowDelete(true); setId(event.id)}}>delete</button>
+                                                        <button className={styles['single-day__event-button']} onClick={()=> {setShowEdit(true); setEditedEvent(event)}}>edit</button>
+                                                        <button className={styles['single-day__event-button--delete']} onClick={()=> {setShowDelete(true); setId(event.id)}}>delete</button>
                                                     </div>
                                                 </div>)
                                     }
@@ -233,7 +277,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 </section>
                 <h2>Tasks</h2>
                 {
-                    events
+                    schedule
                         .filter(event => event.type === 'task')
                         .map(event =>  <div key={event.id} className={styles['single-day__task']}>
                         <label className={checkedTasks.includes(event.id) ? styles['single-day__task-label--checked'] : styles['single-day__task-label']}>
@@ -247,8 +291,8 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                             {event.description}
                         </label>
                         <div>
-                            <button className={styles['single-day__button']}>edit</button>
-                            <button className={styles['single-day__button--delete']} onClick={()=> {setShowDelete(true); setId(event.id)}}>delete</button>
+                            <button className={styles['single-day__event-button']} onClick={()=> {setShowEdit(true); setEditedEvent(event)}}>edit</button>
+                            <button className={styles['single-day__event-button--delete']} onClick={()=> {setShowDelete(true); setId(event.id)}}>delete</button>
                         </div>
                     </div>)
                 }

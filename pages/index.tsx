@@ -68,15 +68,24 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
               daysArray.map((day,i) => 
               <Link href={`/single-day/${month+1}-${day}-${year}`} key={i} >
                   <div 
-                    className={day ? styles['calendar__day'] : styles['calendar__day--no-border']} 
+                    className={day && day === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? styles['calendar__day--current'] : day ? styles['calendar__day'] : styles['calendar__day--no-border']} 
                     onClick={()=> setDayOfMonth(day)}
                   >
                     {day}
-                    {
-                      events.filter(event => event.day === day && event.month === month && event.year === year).map(event => <p key={event.id}
-                      className={event.type === 'event' ? styles['calendar__event'] : styles['calendar__event--task']}
-                      >{event.description}</p>)
-                    }
+                    <div className={styles['calendar__event-container']}>
+                      {
+                        events.filter(event => event.day === day && event.month === month && event.year === year).sort((a,b)=>{
+                          const typeA = a.type 
+                          const typeB = b.type
+                          if(typeA === 'event'){
+                            return -1
+                          }
+                          else return 1
+                        }).map(event => <p key={event.id}
+                        className={event.type === 'event' ? styles['calendar__event'] : styles['calendar__event--task']}
+                        >{event.description}</p>)
+                      }
+                    </div>
                 </div>
               </Link>)
             }
