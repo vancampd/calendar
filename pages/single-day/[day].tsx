@@ -6,9 +6,12 @@ import axios from 'axios'
 import {server} from '../../config/index'
 import DeleteItem from '../../components/DeleteItem/DeleteItem'
 import EditItem from '../../components/EditItem/EditItem'
+import RightArrow from '../../public/right-arrow.svg'
+import LeftArrow from '../../public/left-arrow.svg'
+import Image from 'next/image'
 
 
-const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events, checkedItems}) => {
+const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events, checkedItems, dayOfMonth, setDayOfMonth}) => {
     const router = useRouter()
     const {day} = router.query
 
@@ -38,8 +41,6 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
 
     const handleFormSubmit = (e) => {
         e.preventDefault()
-
-        console.log('input being submitted', input)
 
         if(!input.description || !input.type) return setError(true)
 
@@ -97,7 +98,6 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 }
             })
             .then(res => {
-                console.log(res)
                 setShowDelete(false)
             })
     }
@@ -105,13 +105,12 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
     useEffect(()=>{
         axios.get(`${server}/api/events/${day}`)
         .then(res => setSchedule(res.data))
-    },[showEdit, showDelete])
+    },[showEdit, showDelete, day])
 
     const [checkedTasks, setCheckedTasks] = useState<number[]>(checkedItems.map(item=>item.item_id))
 
     const handleCheckedTasks = (e) => {
         const {checked, value} = e.target
-        console.log('checked',checked)
         if(checked){
             setCheckedTasks([parseInt(value), ...checkedTasks])
         }
@@ -144,94 +143,110 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 : ''
             }
             <h1>{months[month]} {dayArray[1]} {dayArray[2]}</h1>
-            <form onSubmit={handleFormSubmit} className={styles['single-day__form']}>
-                <div className={styles['single-day__input-container']}>
-                    <label className={styles['single-day__event-heading']}>
-                        Description: 
-                        <input 
-                            type='text'
-                            name='description'
-                            value={input.description}
-                            onChange={handleInputChange}
-                            className={styles['single-day__input']}
-                        />
-                    </label>
-                </div>
-                <div className={styles['single-day__input-container']}>
-                    <h3 className={styles['single-day__event-heading']}>Event type:</h3>
-                        <label>
-                            Event
-                            <input 
-                                type='radio'
-                                name='type'
-                                value='event'
-                                checked={input.type === 'event' ? true : false}
-                                onChange={handleInputChange}
-                                className={styles['single-day__input']}
-
-                            />
-                        </label>
-                        <label>
-                            Task
-                            <input 
-                                type='radio'
-                                name='type'
-                                value='task'
-                                checked={input.type === 'task' ? true : false}
-                                onChange={handleInputChange}
-                                className={styles['single-day__input']}
-
-                            />
-                        </label>
-                </div>
-                {
-                    input.type === 'event' ?
+            <div className={styles['single-day__main']}>
+                <Image
+                        src={LeftArrow}
+                        width={50}
+                        height={50}
+                        alt={'Left arrow svg by FreePik'}
+                        onClick={()=>setDayOfMonth(dayOfMonth - 1)}
+                />
+                <form onSubmit={handleFormSubmit} className={styles['single-day__form']}>
                     <div className={styles['single-day__input-container']}>
                         <label className={styles['single-day__event-heading']}>
-                            Time:
+                            Description: 
                             <input 
-                                type='number'
-                                min='1'
-                                max='12'
-                                name='time'
-                                value={input.time}
+                                type='text'
+                                name='description'
+                                value={input.description}
                                 onChange={handleInputChange}
                                 className={styles['single-day__input']}
-                            />
-                        </label>
-                        <label>
-                            AM
-                            <input 
-                                type='radio'
-                                name='timeOfDay'
-                                value='am'
-                                checked={input.timeOfDay === 'am' ? true : false}
-                                onChange={handleInputChange}
-                            />
-                        </label>
-                        <label>
-                            PM
-                            <input 
-                                type='radio'
-                                name='timeOfDay'
-                                value='pm'
-                                checked={input.timeOfDay === 'pm' ? true : false}
-                                onChange={handleInputChange}
                             />
                         </label>
                     </div>
-                    : ''
-                }
-                
-                <button className={styles['single-day__button']}>
-                    Add
-                </button>
-                {
-                    error ?
-                    <p>Please fill out the entire form</p>
-                    : ''
-                }
-            </form>
+                    <div className={styles['single-day__input-container']}>
+                        <h3 className={styles['single-day__event-heading']}>Event type:</h3>
+                            <label>
+                                Event
+                                <input 
+                                    type='radio'
+                                    name='type'
+                                    value='event'
+                                    checked={input.type === 'event' ? true : false}
+                                    onChange={handleInputChange}
+                                    className={styles['single-day__input']}
+
+                                />
+                            </label>
+                            <label>
+                                Task
+                                <input 
+                                    type='radio'
+                                    name='type'
+                                    value='task'
+                                    checked={input.type === 'task' ? true : false}
+                                    onChange={handleInputChange}
+                                    className={styles['single-day__input']}
+
+                                />
+                            </label>
+                    </div>
+                    {
+                        input.type === 'event' ?
+                        <div className={styles['single-day__input-container']}>
+                            <label className={styles['single-day__event-heading']}>
+                                Time:
+                                <input 
+                                    type='number'
+                                    min='1'
+                                    max='12'
+                                    name='time'
+                                    value={input.time}
+                                    onChange={handleInputChange}
+                                    className={styles['single-day__input']}
+                                />
+                            </label>
+                            <label>
+                                AM
+                                <input 
+                                    type='radio'
+                                    name='timeOfDay'
+                                    value='am'
+                                    checked={input.timeOfDay === 'am' ? true : false}
+                                    onChange={handleInputChange}
+                                />
+                            </label>
+                            <label>
+                                PM
+                                <input 
+                                    type='radio'
+                                    name='timeOfDay'
+                                    value='pm'
+                                    checked={input.timeOfDay === 'pm' ? true : false}
+                                    onChange={handleInputChange}
+                                />
+                            </label>
+                        </div>
+                        : ''
+                    }
+                    
+                    <button className={styles['single-day__button']}>
+                        Add
+                    </button>
+                    {
+                        error ?
+                        <p>Please fill out the entire form</p>
+                        : ''
+                    }
+                </form>
+                <Image
+                        src={RightArrow}
+                        width={50}
+                        height={50}
+                        alt={'Right arrow svg by FreePik'}
+                        onClick={()=>setDayOfMonth(dayOfMonth + 1)}
+                />
+            </div>
             <section className={styles['single-day__events-container']}>
                 <h2>Events</h2>
                

@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react'
 import Link from 'next/link'
 import {server} from '../config/index'
 import axios from 'axios'
+import { urlObjectKeys } from 'next/dist/next-server/lib/utils'
 
 export default function Home({year, setYear, month, setMonth, handleDateChange, months, events, dayOfMonth, setDayOfMonth}) {
 
@@ -16,6 +17,21 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
     'Friday', 
     'Saturday'
   ]
+
+  const [backgroundImage, setBackgroundImage] = useState(`https://placeimg.com/640/480/nature/${Math.floor(Math.random()*120)}`)
+  const [backgroundStyles, setBackgroundStyles] = useState({
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover'
+  })
+
+  useEffect(()=>{
+    setBackgroundImage(`https://placeimg.com/640/480/nature/${Math.floor(Math.random()*120)}`)
+  }, [month, year])
+
+  useEffect(()=>setBackgroundStyles({
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover'
+  }), [backgroundImage])
 
   const months31: number[] = [0,2,4,6,7,9,11]
   const months30: number[] = [3,5,8,10]
@@ -50,7 +66,7 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
   }
   
   return (
-    <div className={styles['home-page']}>
+    <div className={styles['home-page']} style={backgroundStyles}>
       <Head>
         <title>Calendar</title>
         <meta name="description" content="Calendar app to track daily schedule and todos" />

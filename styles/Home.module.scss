@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 .home-page {
   padding: 1.5rem;
   height: calc(100vh - 4.5rem);
@@ -5,6 +7,7 @@
 
 .calendar-container {
   height: 100%;
+  color: black;
 }
 
 .calendar {
@@ -23,16 +26,23 @@
   &__labels {
     width: calc(100% / 7);
     padding: 0.5rem;
+    color: white;
   }
 
   &__day {
-    border-left: 1px solid grey;
-    border-bottom: 1px solid grey;
+    border-left: 1px solid $border-color;
+    border-bottom: 1px solid $border-color;
     width: calc(100% / 7);
     height: calc(100vh / 6.4);
     padding: 0.5rem;
     overflow: hidden;
     display: flex;
+    background-color: white;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
 
     &--current {
       @extend .calendar__day;
@@ -46,21 +56,26 @@
       border-left: none !important;
       border-top: none !important;
       border-right: none;
+      opacity: 0;
+
+      &:hover {
+        opacity: 0;
+      }
     }
 
     &:nth-child(7n + 1) {
-      border-left: 1px solid grey;
+      border-left: 1px solid $border-color;
     }
 
     &:nth-child(7n) {
-      box-shadow: 1px 0px 0px 0px grey;
+      box-shadow: 1px 0px 0px 0px $border-color;
     }
 
     &:nth-child(-n + 7) {
-      border-top: 1px solid grey;
+      border-top: 1px solid $border-color;
     }
     &:last-of-type {
-      box-shadow: 1px 0px 0px 0px grey;
+      box-shadow: 1px 0px 0px 0px $border-color;
     }
   }
 
