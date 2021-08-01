@@ -47,7 +47,6 @@
     &--current {
       @extend .calendar__day;
       font-weight: bold;
-      text-decoration: underline;
       color: firebrick;
     }
 
@@ -87,6 +86,7 @@
     font-size: 0.75rem;
     color: grey;
     margin: 0.25rem;
+    text-decoration: none;
 
     &--task {
       @extend .calendar__event;

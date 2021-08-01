@@ -7,12 +7,18 @@
   &__main {
     width: 70%;
     display: flex;
-    justify-content: space-between;
+    // justify-content: center;
+    position: relative;
+  }
+
+  &__arrow--invisible {
+    display: none !important;
   }
 
   &__form {
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
   }
 
   &__input-container {

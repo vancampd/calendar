@@ -11,7 +11,7 @@ import LeftArrow from '../../public/left-arrow.svg'
 import Image from 'next/image'
 
 
-const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events, checkedItems, dayOfMonth, setDayOfMonth}) => {
+const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events, checkedItems, dayOfMonth, setDayOfMonth, numberOfDays}) => {
     const router = useRouter()
     const {day} = router.query
 
@@ -150,6 +150,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                         height={50}
                         alt={'Left arrow svg by FreePik'}
                         onClick={()=>setDayOfMonth(dayOfMonth - 1)}
+                        className={dayOfMonth > 1 ? '' : styles['single-day__arrow--invisible']}
                 />
                 <form onSubmit={handleFormSubmit} className={styles['single-day__form']}>
                     <div className={styles['single-day__input-container']}>
@@ -240,11 +241,12 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                     }
                 </form>
                 <Image
-                        src={RightArrow}
-                        width={50}
-                        height={50}
-                        alt={'Right arrow svg by FreePik'}
-                        onClick={()=>setDayOfMonth(dayOfMonth + 1)}
+                    src={RightArrow}
+                    width={50}
+                    height={50}
+                    alt={'Right arrow svg by FreePik'}
+                    onClick={()=>setDayOfMonth(dayOfMonth + 1)}
+                    className={dayOfMonth < numberOfDays ? '' : styles['single-day__arrow--invisible']}
                 />
             </div>
             <section className={styles['single-day__events-container']}>

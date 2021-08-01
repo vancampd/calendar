@@ -6,7 +6,7 @@ import {server} from '../config/index'
 import axios from 'axios'
 import { urlObjectKeys } from 'next/dist/next-server/lib/utils'
 
-export default function Home({year, setYear, month, setMonth, handleDateChange, months, events, dayOfMonth, setDayOfMonth}) {
+export default function Home({year, setYear, month, setMonth, handleDateChange, months, events, dayOfMonth, setDayOfMonth, numberOfDays}) {
 
   const daysOfTheWeek: string[] = [
     'Sunday', 
@@ -33,21 +33,21 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
     backgroundSize: 'cover'
   }), [backgroundImage])
 
-  const months31: number[] = [0,2,4,6,7,9,11]
-  const months30: number[] = [3,5,8,10]
+  // const months31: number[] = [0,2,4,6,7,9,11]
+  // const months30: number[] = [3,5,8,10]
 
-  const [numberOfDays, setNumberOfDays] = useState<number | undefined>()
+  // const [numberOfDays, setNumberOfDays] = useState<number | undefined>()
 
-  // Set the amount of days in the month to 31, 30, or 28 based on which month is selected in the <select> menu in the header
-  useEffect(()=>{
-    if(months31.includes(month)) {
-      setNumberOfDays(31)
-    }
-    else if (months30.includes(month)){
-      setNumberOfDays(30)
-    }
-    else setNumberOfDays(28)
-  },[month] )
+  // // Set the amount of days in the month to 31, 30, or 28 based on which month is selected in the <select> menu in the header
+  // useEffect(()=>{
+  //   if(months31.includes(month)) {
+  //     setNumberOfDays(31)
+  //   }
+  //   else if (months30.includes(month)){
+  //     setNumberOfDays(30)
+  //   }
+  //   else setNumberOfDays(28)
+  // },[month] )
 
   // Create array of dates to map through based on how many days are in the selected month
   const daysArray: (number | string)[] = []
