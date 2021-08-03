@@ -3,23 +3,41 @@ import styles from './EditItem.module.scss'
 import axios from 'axios'
 import {server} from '../../config/index'
 
-const EditItem = ({ editedEvent, day, setShowEdit}) => {
+interface editedEvent {
+    id: number;
+    day: number;
+    month: number;
+    year: number;
+    description: string;
+    type: string;
+    time: number | null;
+    timeOfDay: string | null;
+}
 
+interface Props {
+    editedEvent: any;
+    day: string | string[] | undefined;
+    setShowEdit: any;
+    setError: any;
+}
+
+const EditItem = (props: Props) => {
+    const { editedEvent, day, setShowEdit, setError} = props
     interface Event {
         description: string;
         type: string;
-        time: number | null;
+        time: number | string;
         timeOfDay: string;
     }
 
     const [input, setInput] = useState<Event>({
-        description: editedEvent.description,
-        type: editedEvent.type,
+        description: editedEvent.description || '',
+        type: editedEvent.type || '',
         time: editedEvent.time || '',
         timeOfDay: editedEvent.timeOfDay || ''
     })
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: any) => {
         const {name, value} = e.target
 
         setInput({
@@ -28,7 +46,7 @@ const EditItem = ({ editedEvent, day, setShowEdit}) => {
         })
     }
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = (e: any) => {
         e.preventDefault()
 
         console.log('input being submitted', input)

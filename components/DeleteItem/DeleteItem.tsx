@@ -1,7 +1,14 @@
 import React from 'react'
 import styles from './DeleteItem.module.scss'
 
-const DeleteItem = ({setShowDelete, handleDelete, id}) => {
+interface Props {
+    setShowDelete: any;
+    handleDelete: any;
+    id: number | undefined;
+}
+
+const DeleteItem = (props: Props) => {
+const {setShowDelete, handleDelete, id} = props
 
     return (
         <div className={styles['overlay']}>

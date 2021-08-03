@@ -9,9 +9,19 @@ import EditItem from '../../components/EditItem/EditItem'
 import RightArrow from '../../public/right-arrow.svg'
 import LeftArrow from '../../public/left-arrow.svg'
 import Image from 'next/image'
+interface Props {
+    month:number;
+    year:number;
+    months:string[];
+    dayOfMonth:number;
+    setDayOfMonth:any;
+    numberOfDays:any;
+    events: any;
+    checkedItems: any;
+}
 
-
-const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, events, checkedItems, dayOfMonth, setDayOfMonth, numberOfDays}) => {
+const SingleDay = (props: Props) => {
+    const {year, month, months, events, checkedItems, dayOfMonth, setDayOfMonth, numberOfDays} = props
     const router = useRouter()
     const {day} = router.query
 
@@ -30,7 +40,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
 
     const [schedule, setSchedule] = useState(events)
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e:any) => {
         const {name, value} = e.target
 
         setInput({
@@ -39,7 +49,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
         })
     }
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = (e:any) => {
         e.preventDefault()
 
         if(!input.description || !input.type) return setError(true)
@@ -76,6 +86,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
     const [id, setId] = useState<number | undefined>()
 
     interface Event {
+        id: number;
         day: number;
         month: number;
         year: number;
@@ -88,7 +99,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
     const [showEdit, setShowEdit] = useState<boolean>(false)
     const [editedEvent, setEditedEvent] = useState<Event>()
 
-    const handleDelete = (e, id) => {
+    const handleDelete = (e:any, id:number) => {
         e.preventDefault()
 
         axios
@@ -107,9 +118,9 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
         .then(res => setSchedule(res.data))
     },[showEdit, showDelete, day])
 
-    const [checkedTasks, setCheckedTasks] = useState<number[]>(checkedItems.map(item=>item.item_id))
+    const [checkedTasks, setCheckedTasks] = useState<number[]>(checkedItems.map((item:any)=>item.item_id))
 
-    const handleCheckedTasks = (e) => {
+    const handleCheckedTasks = (e:any) => {
         const {checked, value} = e.target
         if(checked){
             setCheckedTasks([parseInt(value), ...checkedTasks])
@@ -130,7 +141,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 <title>Calendar: {day} </title>
                 <meta name="description" content="Calendar app to track daily schedule and todos" />
                 <meta name="description" content="Your schedule and tasks for a single day" />
-                <link rel="icon" href="/calendar.svg" alt='By Font Awesome - Own work, OFL, https://commons.wikimedia.org/w/index.php?curid=37001111'/>
+                <link rel="By Font Awesome - Own work, OFL, https://commons.wikimedia.org/w/index.php?curid=37001111" href="/calendar.svg"/>
             </Head>
             {
                 showDelete ?
@@ -139,7 +150,7 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
             }
             {
                 showEdit ?
-                <EditItem editedEvent={editedEvent} day={day} setShowEdit={setShowEdit}/>
+                <EditItem editedEvent={editedEvent} day={day} setShowEdit={setShowEdit} setError={setError}/>
                 : ''
             }
             <h1>{months[month]} {dayArray[1]} {dayArray[2]}</h1>
@@ -260,8 +271,8 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                                 {hour}
                                 {
                                     schedule
-                                        .filter(event => event.type === 'event' && event.time === hour && event.timeOfDay === 'am')
-                                        .map(event => <div key={event.id} className={styles['single-day__event']}>
+                                        .filter((event:any) => event.type === 'event' && event.time === hour && event.timeOfDay === 'am')
+                                        .map((event:any) => <div key={event.id} className={styles['single-day__event']}>
                                                 <p className={styles['single-day__event-description']}>{event.description}</p>
                                                 <div>
                                                     <button className={styles['single-day__event-button']} onClick={()=> {setShowEdit(true); setEditedEvent(event)}}>edit</button>
@@ -275,12 +286,12 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                     <div className={styles['single-day__half-day']}>
                         <h3>PM</h3>
                         {
-                            hours.map(hour => <div key={hour} className={styles['single-day__time']}>
+                            hours.map((hour:number) => <div key={hour} className={styles['single-day__time']}>
                                     {hour}
                                     {
                                         schedule
-                                            .filter(event => event.type === 'event' && event.time === hour && event.timeOfDay === 'pm')
-                                            .map(event => <div key={event.id} className={styles['single-day__event']}>
+                                            .filter((event:any) => event.type === 'event' && event.time === hour && event.timeOfDay === 'pm')
+                                            .map((event:any) => <div key={event.id} className={styles['single-day__event']}>
                                                     <p className={styles['single-day__event-description']}>{event.description}</p>
                                                     <div>
                                                         <button className={styles['single-day__event-button']} onClick={()=> {setShowEdit(true); setEditedEvent(event)}}>edit</button>
@@ -295,8 +306,8 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
                 <h2>Tasks</h2>
                 {
                     schedule
-                        .filter(event => event.type === 'task')
-                        .map(event =>  <div key={event.id} className={styles['single-day__task']}>
+                        .filter((event:any) => event.type === 'task')
+                        .map((event:any) =>  <div key={event.id} className={styles['single-day__task']}>
                         <label className={checkedTasks.includes(event.id) ? styles['single-day__task-label--checked'] : styles['single-day__task-label']}>
                             <input
                                 className={styles['single-day__task-input']}
@@ -318,9 +329,9 @@ const singleDay = ({year, setYear, month, setMonth, handleDateChange, months, ev
     )
 }
 
-export default singleDay;
+export default SingleDay;
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context:any) => {
     const {day} = context.params
     
     const res = await axios.get(`${server}/api/events/${day}`)

@@ -2,8 +2,16 @@ import React from 'react'
 import styles from './Header.module.scss'
 import Logo from '../Logo/Logo'
 
-const Header = ({month, setMonth, handleDateChange, year, months}) => {
-  // const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+interface Props {
+  month: number;
+  setMonth: any;
+  handleDateChange: any;
+  year: number;
+  months: string[];
+}
+
+const Header = (props: Props) => {
+  const {month, setMonth, handleDateChange, year, months} = props
 
   const years: number[] = []
   for(let i=0; i<10; i++) years.push(2021 - i)

@@ -6,7 +6,18 @@ import {server} from '../config/index'
 import axios from 'axios'
 import { urlObjectKeys } from 'next/dist/next-server/lib/utils'
 
-export default function Home({year, setYear, month, setMonth, handleDateChange, months, events, dayOfMonth, setDayOfMonth, numberOfDays}) {
+interface Props {
+  month:number;
+  year:number;
+  months:string[];
+  dayOfMonth:number;
+  setDayOfMonth:any;
+  numberOfDays:any;
+  events: any;
+}
+
+export default function Home(props: Props) {
+  const {year, month, months, events, dayOfMonth, setDayOfMonth, numberOfDays} = props
 
   const daysOfTheWeek: string[] = [
     'Sunday', 
@@ -54,7 +65,7 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
       <Head>
         <title>Calendar</title>
         <meta name="description" content="Calendar app to track daily schedule and todos" />
-        <link rel="icon" href="/calendar.svg" alt='By Font Awesome - Own work, OFL, https://commons.wikimedia.org/w/index.php?curid=37001111'/>
+        <link rel="iBy Font Awesome - Own work, OFL, https://commons.wikimedia.org/w/index.php?curid=37001111'" href="/calendar.svg"/>
       </Head>
       <main className={styles['calendar-container']}>
         <section className={styles.calendar}>
@@ -74,14 +85,14 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
                     {day}
                     <div className={styles['calendar__event-container']}>
                       {
-                        events.filter(event => event.day === day && event.month === month && event.year === year).sort((a,b)=>{
+                        events.filter((event:any) => event.day === day && event.month === month && event.year === year).sort((a:any,b:any)=>{
                           const typeA = a.type 
                           const typeB = b.type
                           if(typeA === 'event'){
                             return -1
                           }
                           else return 1
-                        }).map(event => <p key={event.id}
+                        }).map((event:any) => <p key={event.id}
                         className={event.type === 'event' ? styles['calendar__event'] : styles['calendar__event--task']}
                         >{event.description}</p>)
                       }
@@ -96,7 +107,7 @@ export default function Home({year, setYear, month, setMonth, handleDateChange, 
   )
 }
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context:any) => {
   
   const res = await axios.get(`${server}/api/indexRoutes`)
 

@@ -12,11 +12,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-  const handleDateChange = (e): void => {
+  const handleDateChange = (e: any): void => {
     const {name, value} = e.target   
         if(name === 'month') setMonth(parseInt(value))
         if(name === 'year') setYear(parseInt(value))
-        setDayOfMonth()
+        setDayOfMonth(undefined)
   }
 
   useEffect(()=> {
@@ -54,10 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Component 
       {...pageProps} 
         month={month}
-        setMonth={setMonth}
-        handleDateChange={handleDateChange}
         year={year}
-        setYear={setYear}
         months={months}
         dayOfMonth={dayOfMonth}
         setDayOfMonth={setDayOfMonth}
