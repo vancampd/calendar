@@ -109,7 +109,7 @@ export default function Home(props: Props) {
 
 export const getServerSideProps = async (context:any) => {
   
-  const res = await axios.get(`${server}/api/indexRoutes`)
+  const res = await axios.get(`${server}api/indexRoutes`)
 
   return {
       props: {

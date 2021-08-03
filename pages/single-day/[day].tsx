@@ -59,7 +59,7 @@ const SingleDay = (props: Props) => {
         if(input.type === 'event' && !input.timeOfDay) return setError(true)
 
         axios
-            .post(`${server}/api/events/${day}`, {
+            .post(`${server}api/events/${day}`, {
                 ...input,
                 day: parseInt(dayArray[1]),
                 month,
@@ -103,7 +103,7 @@ const SingleDay = (props: Props) => {
         e.preventDefault()
 
         axios
-            .delete(`${server}/api/events/${day}`, {
+            .delete(`${server}api/events/${day}`, {
                 data: {
                     id
                 }
@@ -114,7 +114,7 @@ const SingleDay = (props: Props) => {
     }
 
     useEffect(()=>{
-        axios.get(`${server}/api/events/${day}`)
+        axios.get(`${server}api/events/${day}`)
         .then(res => setSchedule(res.data))
     },[showEdit, showDelete, day])
 
@@ -131,7 +131,7 @@ const SingleDay = (props: Props) => {
         }
 
         axios
-            .put(`${server}/api/checked`, { checked, id: parseInt(value) })
+            .put(`${server}api/checked`, { checked, id: parseInt(value) })
     }
 
 
@@ -334,8 +334,8 @@ export default SingleDay;
 export const getServerSideProps = async (context:any) => {
     const {day} = context.params
     
-    const res = await axios.get(`${server}/api/events/${day}`)
-    const checked = await axios.get(`${server}/api/checked`)
+    const res = await axios.get(`${server}api/events/${day}`)
+    const checked = await axios.get(`${server}api/checked`)
 
     return {
         props: {
