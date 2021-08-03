@@ -1,3 +1,25 @@
+import Cors from 'cors'
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+// Initializing the cors middleware
+const cors = Cors({
+  methods: ['GET'],
+})
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result:any) => {
+      if (result instanceof Error) {
+        return reject(result)
+      }
+
+      return resolve(result)
+    })
+  })
+}
+
 let mysql = require('mysql')
 
 let con = mysql.createConnection({
@@ -19,7 +41,10 @@ con.connect((err:any)=>{
     console.log('Connected to the MySQL Server!')
 })
 
-export default function handler(req:any, res:any){
+export default async function handler(req:any, res:any){
+
+    await runMiddleware(req, res, cors)
+
     if(req.method==='GET'){
         const {month, year} = req.body
         const sql = `SELECT id, day, month, year, description, type FROM sys.calendar_items`
