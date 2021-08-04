@@ -1,7 +1,7 @@
 let mysql = require('mysql')
 
 let con = mysql.createConnection({
-    host: 'database-1.cvt54lronztd.us-east-2.rds.amazonaws.com',
+    host: 'calendar.cvt54lronztd.us-east-2.rds.amazonaws.com',
     user: 'dvc',
     password: 'MarleyGirl3',
     database: ''

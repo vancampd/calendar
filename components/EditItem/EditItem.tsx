@@ -49,12 +49,10 @@ const EditItem = (props: Props) => {
     const handleFormSubmit = (e: any) => {
         e.preventDefault()
 
-        console.log('input being submitted', input)
-
         if(!input.description || !input.type) return setError(true)
 
         axios
-            .put(`${server}/api/events/${day}`, {
+            .put(`${server}api/events/${day}`, {
                 ...input,
                 id: editedEvent.id
             })

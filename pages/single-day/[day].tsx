@@ -66,7 +66,7 @@ const SingleDay = (props: Props) => {
                 year
             })
             .then(res => {
-                return axios.get(`${server}/api/events/${day}`)
+                return axios.get(`${server}api/events/${day}`)
                 .then(res => setSchedule(res.data))
             })
             .catch(err => console.log('error posting event', err))
@@ -143,16 +143,6 @@ const SingleDay = (props: Props) => {
                 <meta name="description" content="Your schedule and tasks for a single day" />
                 <link rel="By Font Awesome - Own work, OFL, https://commons.wikimedia.org/w/index.php?curid=37001111" href="/calendar.svg"/>
             </Head>
-            {
-                showDelete ?
-                <DeleteItem setShowDelete={setShowDelete} handleDelete={handleDelete} id={id}/>
-                : ''
-            }
-            {
-                showEdit ?
-                <EditItem editedEvent={editedEvent} day={day} setShowEdit={setShowEdit} setError={setError}/>
-                : ''
-            }
             <h1>{months[month]} {dayArray[1]} {dayArray[2]}</h1>
             <div className={styles['single-day__main']}>
                 <Image
@@ -160,7 +150,7 @@ const SingleDay = (props: Props) => {
                         width={50}
                         height={50}
                         alt={'Left arrow svg by FreePik'}
-                        onClick={()=>setDayOfMonth(dayOfMonth - 1)}
+                        onClick={showEdit || showDelete ? ()=>{} : ()=>setDayOfMonth(dayOfMonth - 1)}
                         className={dayOfMonth > 1 ? '' : styles['single-day__arrow--invisible']}
                 />
                 <form onSubmit={handleFormSubmit} className={styles['single-day__form']}>
@@ -256,7 +246,7 @@ const SingleDay = (props: Props) => {
                     width={50}
                     height={50}
                     alt={'Right arrow svg by FreePik'}
-                    onClick={()=>setDayOfMonth(dayOfMonth + 1)}
+                    onClick={showEdit || showDelete ? ()=>{} : ()=>setDayOfMonth(dayOfMonth + 1)}
                     className={dayOfMonth < numberOfDays ? '' : styles['single-day__arrow--invisible']}
                 />
             </div>
@@ -325,6 +315,16 @@ const SingleDay = (props: Props) => {
                     </div>)
                 }
             </section>
+            {
+                showDelete ?
+                <DeleteItem setShowDelete={setShowDelete} handleDelete={handleDelete} id={id}/>
+                : ''
+            }
+            {
+                showEdit ?
+                <EditItem editedEvent={editedEvent} day={day} setShowEdit={setShowEdit} setError={setError}/>
+                : ''
+            }
         </div>
     )
 }
