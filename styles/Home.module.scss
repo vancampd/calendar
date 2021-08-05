@@ -35,6 +35,8 @@
     width: calc(100% / 7);
     padding: 0.5rem;
     color: white;
+    font-weight: bold;
+    -webkit-text-stroke: 0.75px black;
   }
 
   &__day {
@@ -47,6 +49,7 @@
     display: flex;
     background-color: white;
     opacity: 0.8;
+    cursor: pointer;
 
     &:hover {
       opacity: 1;

@@ -12,7 +12,12 @@
     position: relative;
   }
 
+  &__arrow {
+    cursor: pointer;
+  }
+
   &__arrow--invisible {
+    @extend .single-day__arrow;
     display: none !important;
   }
 
@@ -36,6 +41,7 @@
   &__input {
     border: none;
     margin: 0;
+    cursor: pointer;
   }
 
   &__event-heading {
@@ -132,6 +138,7 @@
     text-align: center;
     border-radius: 50px;
     transition: 0.2s;
+    cursor: pointer;
 
     &:hover {
       background-color: white;

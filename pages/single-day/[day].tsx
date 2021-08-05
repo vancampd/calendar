@@ -151,7 +151,7 @@ const SingleDay = (props: Props) => {
                         height={50}
                         alt={'Left arrow svg by FreePik'}
                         onClick={showEdit || showDelete ? ()=>{} : ()=>setDayOfMonth(dayOfMonth - 1)}
-                        className={dayOfMonth > 1 ? '' : styles['single-day__arrow--invisible']}
+                        className={dayOfMonth > 1 ? styles['single-day__arrow'] : styles['single-day__arrow--invisible']}
                 />
                 <form onSubmit={handleFormSubmit} className={styles['single-day__form']}>
                     <div className={styles['single-day__input-container']}>
@@ -247,7 +247,7 @@ const SingleDay = (props: Props) => {
                     height={50}
                     alt={'Right arrow svg by FreePik'}
                     onClick={showEdit || showDelete ? ()=>{} : ()=>setDayOfMonth(dayOfMonth + 1)}
-                    className={dayOfMonth < numberOfDays ? '' : styles['single-day__arrow--invisible']}
+                    className={dayOfMonth < numberOfDays ? styles['single-day__arrow'] : styles['single-day__arrow--invisible']}
                 />
             </div>
             <section className={styles['single-day__events-container']}>

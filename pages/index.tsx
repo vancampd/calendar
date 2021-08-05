@@ -76,7 +76,7 @@ export default function Home(props: Props) {
       <Head>
         <title>Calendar</title>
         <meta name="description" content="Calendar app to track daily schedule and todos" />
-        <link rel="iBy Font Awesome - Own work, OFL, https://commons.wikimedia.org/w/index.php?curid=37001111'" href="/calendar.svg"/>
+        <link rel="iBy Font Awesome - Own work, OFL, 'https://commons.wikimedia.org/w/index.php?curid=37001111'" href="/calendar.svg"/>
       </Head>
       <main className={styles['calendar-container']}>
         <section className={styles.calendar}>
