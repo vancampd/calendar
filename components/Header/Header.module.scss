@@ -1,12 +1,32 @@
+@use '../../styles/mixins' as *;
+
 .header {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 3rem;
   margin: 0.75rem 1.5rem;
 
+  @include tablet {
+    flex-direction: row;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+
+    @include tablet {
+      flex-direction: row;
+    }
+  }
+
   &__label {
-    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+
+    @include tablet {
+      margin-top: 0;
+      margin-left: 0.5rem;
+    }
   }
 
   &__input {

@@ -1,7 +1,14 @@
 @use './variables' as *;
+@use './styles/mixins' as *;
 
 .home-page {
   padding: 1.5rem;
+  height: calc(100vh - 8.125rem);
+  overflow: auto;
+
+  @include tablet {
+    min-height: calc(100vh - 4.625rem);
+  }
 }
 
 .calendar-container {
@@ -15,6 +22,8 @@
   &__days-section {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
+    height: calc(100% - 42px);
   }
 
   &__labels-section {
@@ -32,7 +41,7 @@
     border-left: 1px solid $border-color;
     border-bottom: 1px solid $border-color;
     width: calc(100% / 7);
-    height: calc(100vh / 6.4);
+    height: calc(100% / 5);
     padding: 0.5rem;
     overflow: hidden;
     display: flex;
@@ -78,7 +87,11 @@
   }
 
   &__event-container {
-    margin-left: 0.2rem;
+    margin: 0 auto;
+
+    @include tablet {
+      margin-left: 0.2rem;
+    }
   }
 
   &__event {

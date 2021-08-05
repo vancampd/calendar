@@ -80,7 +80,7 @@ const SingleDay = (props: Props) => {
         setError(false)
     }
 
-    const hours = [1,2,3,4,5,6,7,8,9,10,11,12]
+    const hours = [12,1,2,3,4,5,6,7,8,9,10,11]
 
     const [showDelete, setShowDelete] = useState<boolean>(false)
     const [id, setId] = useState<number | undefined>()

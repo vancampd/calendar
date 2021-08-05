@@ -20,7 +20,7 @@ const Header = (props: Props) => {
     <header className={styles.header}>
       <Logo/>
       <nav>
-        <form>
+        <form className={styles['header__form']}>
           <label className={styles['header__label']}>
             Select month:
             <select name='month' onChange={handleDateChange} className={styles['header__input']}>

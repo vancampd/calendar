@@ -1,3 +1,5 @@
+@use './styles/mixins' as *;
+
 .single-day {
   display: flex;
   flex-direction: column;
@@ -71,7 +73,10 @@
   &__task {
     display: flex;
     justify-content: space-between;
-    width: 48%;
+
+    @include tablet {
+      width: 48%;
+    }
   }
 
   &__task-label {
@@ -93,17 +98,30 @@
   &__time-container {
     display: flex;
     justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+
+    @include tablet {
+      flex-direction: row;
+    }
   }
 
   &__half-day {
     display: flex;
     flex-direction: column;
-    width: 48%;
+
+    @include tablet {
+      width: 48%;
+    }
   }
 
   &__time {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     display: flex;
+
+    @include tablet {
+      margin-bottom: 1rem;
+    }
   }
 
   &__button {

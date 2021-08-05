@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react'
 import Link from 'next/link'
 import {server} from '../config/index'
 import axios from 'axios'
-import { urlObjectKeys } from 'next/dist/next-server/lib/utils'
+// import { urlObjectKeys } from 'next/dist/next-server/lib/utils'
 
 interface Props {
   month:number;
@@ -19,6 +19,18 @@ interface Props {
 export default function Home(props: Props) {
   const {year, month, months, events, dayOfMonth, setDayOfMonth, numberOfDays} = props
 
+  const [windowSize, setWindowSize] = useState<number>()
+
+  useEffect(()=> {setWindowSize(window.innerWidth)}, [])
+
+  const handleWindowResize = (e: any) => setWindowSize(e.target.innerWidth)
+  const [eventAdded, setEventAdded] = useState(false)
+
+  useEffect(()=>{
+    window.addEventListener('resize', handleWindowResize)
+    return ()=>{window.removeEventListener('resize', handleWindowResize)}
+  })
+
   const daysOfTheWeek: string[] = [
     'Sunday', 
     'Monday', 
@@ -29,7 +41,7 @@ export default function Home(props: Props) {
     'Saturday'
   ]
 
-  const [backgroundImage, setBackgroundImage] = useState(`https://placeimg.com/640/480/nature/${Math.floor(Math.random()*120)}`)
+  const [backgroundImage, setBackgroundImage] = useState('')
   const [backgroundStyles, setBackgroundStyles] = useState({
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover'
@@ -94,7 +106,14 @@ export default function Home(props: Props) {
                           else return 1
                         }).map((event:any) => <p key={event.id}
                         className={event.type === 'event' ? styles['calendar__event'] : styles['calendar__event--task']}
-                        >{event.description}</p>)
+                        >
+                          {
+                            windowSize && windowSize < 600 ?
+                            '●'
+                            : event.description 
+                          }
+                          
+                        </p>)
                       }
                     </div>
                 </div>
