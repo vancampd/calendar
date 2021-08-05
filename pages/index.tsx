@@ -82,7 +82,13 @@ export default function Home(props: Props) {
         <section className={styles.calendar}>
           <div className={styles['calendar__labels-section']}>
             {
-              daysOfTheWeek.map(day => <div key={day} className={styles['calendar__labels']}>{day}</div>)
+              daysOfTheWeek.map(day => <div key={day} className={styles['calendar__labels']}>
+                {
+                  windowSize && windowSize < 600 ?
+                  day.substring(0,3)
+                  : day
+                }
+                </div>)
             }
           </div>
           <section className={styles['calendar__days-section']}>
