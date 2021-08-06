@@ -102,14 +102,37 @@ export default function Home(props: Props) {
                     {day}
                     <div className={styles['calendar__event-container']}>
                       {
-                        events.filter((event:any) => event.day === day && event.month === month && event.year === year).sort((a:any,b:any)=>{
+                        events.filter((event:any) => event.day === day && event.month === month && event.year === year)
+                        .sort((a:any,b:any)=>{
                           const typeA = a.type 
                           const typeB = b.type
                           if(typeA === 'event'){
                             return -1
                           }
                           else return 1
-                        }).map((event:any) => <p key={event.id}
+                        })
+                        .sort((a:any, b:any)=>{
+                          if(a.timeOfDay === 'am' && b.timeOfDay === 'pm') return -1
+                          if(a.timeOfDay === 'am' && b.timeOfDay === 'am') {
+                            if(a.time === 12) return -1
+
+                            if(b.time === 12) return 1
+
+                            if(a.time < b.time) {return -1}
+                            else if (a.time > b.time) {return 1}
+                            else return 0
+                          }
+                          if(a.timeOfDay === 'pm' && b.timeOfDay === 'pm') {
+                            if(a.time === 12) return -1
+
+                            if(b.time === 12) return 1
+
+                            if(a.time > b.time) {return 1}
+                            else if (a.time < b.time) {return -1}
+                            else return 0
+                          }
+                        })
+                        .map((event:any) => <p key={event.id}
                         className={event.type === 'event' ? styles['calendar__event'] : styles['calendar__event--task']}
                         >
                           {
